@@ -5,7 +5,7 @@ TARGET_EXEC := bin
 BUILD_DIR := target
 SRC_DIR := src
 
-SRCS := main.cpp Point2D.cpp Polygon.cpp
+SRCS := main.cpp processFiles.cpp Point2D.cpp Polygon.cpp Segment.cpp
 
 SRCS := $(addprefix $(SRC_DIR)/,$(SRCS))
 OBJS := $(SRCS:%=$(BUILD_DIR)/%.o)
