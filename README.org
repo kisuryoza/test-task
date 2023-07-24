@@ -1,0 +1,11 @@
+* Напрямую
+#+begin_src sh
+make
+target/bin polys.txt lines.txt
+#+end_src
+
+* Docker
+#+begin_src sh
+docker build -t test-task .
+docker run -it --rm test-task
+#+end_src

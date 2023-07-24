@@ -1,0 +1,7 @@
+.ccls
+.ccls-cache/
+.cache/
+target/
+compile_commands.json
+
+results.txt
