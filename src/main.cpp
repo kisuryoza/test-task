@@ -12,7 +12,8 @@
  * @param v1p2 Вторая точка вектора #1
  * @param v2p1 Первая точка вектора #2
  * @param v2p2 Вторая точка вектора #2
- * @return Кол-во пересечений между векторами: 0 - нету, 1 - есть, 2 - два вектора на одной линии
+ * @return Кол-во пересечений между векторами: 0 - нету, 1 - есть, 2 - два
+ * вектора на одной линии
  */
 int areIntersecting(Point2D v1p1, Point2D v1p2, Point2D v2p1, Point2D v2p2) {
   double v1x1{v1p1.getX()}, v1y1{v1p1.getY()};
@@ -56,6 +57,28 @@ int areIntersecting(Point2D v1p1, Point2D v1p2, Point2D v2p1, Point2D v2p2) {
 }
 
 /**
+ * @brief Считает кол-во перечесений между вектором p1-p2 и каждым вектором в массиве
+ *
+ * @param p1 Точка 1
+ * @param p2 Точка 2
+ * @param points Массив с точками
+ * @param amountOfPoints Размер массива с точками
+ * @return [TODO:return]
+ */
+int countIntersections(Point2D p1, Point2D p2, std::vector<Point2D> points,
+                       int amountOfPoints) {
+  int amountOfIntersections{0};
+  int j{1};
+  for (int i = 0; i < amountOfPoints; ++i, ++j) {
+    if (i == amountOfPoints - 1)
+      j = 0;
+    amountOfIntersections +=
+        areIntersecting(p1, p2, points.at(i), points.at(j));
+  }
+  return amountOfIntersections;
+}
+
+/**
  * @brief Определяет отношение отрезков к многоугольнику
  *
  * @param polygon Класс с объектом многоульника
@@ -79,15 +102,8 @@ void describeStatus(const Polygon &polygon,
   for (Segment segment : listOfSegments) {
     Point2D p1{segment.getPoint1()}, p2{segment.getPoint2()};
 
-    int amountOfIntersections{0};
-    int j{1};
-    for (int i = 0; i < amountOfPoints; ++i, ++j) {
-      if (i == amountOfPoints - 1)
-        j = 0;
-      amountOfIntersections +=
-          areIntersecting(p1, p2, points.at(i), points.at(j));
-    }
-
+    int amountOfIntersections{
+        countIntersections(p1, p2, points, amountOfPoints)};
     if (amountOfIntersections > 0) {
       if (amountOfIntersections % 2 == 0)
         // Oтрезок пересекает многоугольник
@@ -99,14 +115,8 @@ void describeStatus(const Polygon &polygon,
       continue;
     }
 
-    amountOfIntersections = 0;
-    j = 1;
-    for (int i = 0; i < amountOfPoints; ++i, ++j) {
-      if (i == amountOfPoints - 1)
-        j = 0;
-      amountOfIntersections += areIntersecting(p1, pointOutsideOfPolygon,
-                                               points.at(i), points.at(j));
-    }
+    amountOfIntersections =
+        countIntersections(p1, pointOutsideOfPolygon, points, amountOfPoints);
     if (amountOfIntersections % 2 == 0)
       // Отрезок не имеет ничего общего с многоугольником
       writeResults(3, iterOfSegment);
